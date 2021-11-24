@@ -102,3 +102,8 @@ C:\Users\Hua_Gui\.ssh\id_rsa.pub
 推动：
 - `...`/Pull Push/Push to...，点击版本库就推送上去了。
 - `Ctrl+Shift+P`，`git push to`，点击版本库。
+
+## 资料
+
+- 最官方最全面：[Pro Git中文版](https://git-scm.com/book/zh/v2)
+- 网络搜索git入门
