@@ -250,5 +250,55 @@ print('$ nslookup www.python.org')
 r = subprocess.call(['nslookup', 'www.python.org'])
 print('Exit code:', r)
 ```
+### 进程间通信
+multiprocessing模块包装了底层的机制，提供了Queue、Pipes等多种方式来交换数据。
 
+## 多线程
+python提供两个模块：_thread(低级模块)和threading(高级，常用)
+启动线程就是创建thread实例，调用start()开始执行
+启动一个线程就是把一个函数传入并创建Thread实例，调用start()开始执行
+``` python 
+def loop():
+    print('thread %s is running...' % threading.current_thread().name)
+    n = 0
+    while n < 5:
+        n = n + 1
+        print('thread %s >>> %s' % (threading.current_thread().name, n))
+        time.sleep(1)
+    print('thread %s ended.' % threading.current_thread().name)
 
+print('thread %s is running...' % threading.current_thread().name)
+t = threading.Thread(target=loop, name='LoopThread')
+t.start()
+t.join()
+print('thread %s ended.' % threading.current_thread().name)
+```
+
+### Lock
+在多进程中，同一个变量，各有一份拷贝存在于每个进程中，互不影响，
+
+在多线程中个，所有的变量都是线程共享，所以每个变量都能被任何一个线程修改，也是危险所在。
+
+当多个线程调用同一个变量时，可能出现变量值出现修改冲突，影响最终结果。因此在调用时可以采取threading.Lock()来实现。
+``` python
+balance = 0
+lock = threading.Lock()
+
+def run_thread(n):
+    for i in range(100000):
+        # 先要获取锁:
+        lock.acquire()
+        try:
+            # 放心地改吧:
+            change_it(n)
+        finally:
+            # 改完了一定要释放锁:
+            lock.release()
+```
+当多个线程同事执行lock.acquire()时，只有一个线程能成功获取锁，在它执行完之后下一个线程才能执行。
+但会使代码的程序的效率降低。
+
+### 多核cpu
+Python的线程虽然是真正的线程，但解释器执行代码时，有一个GIL锁：Global Interpreter Lock，任何Python线程执行前，必须先获得GIL锁，然后，每执行100条字节码，解释器就自动释放GIL锁，让别的线程有机会执行。这个GIL全局锁实际上把所有线程的执行代码都给上了锁，所以，多线程在Python中只能交替执行，即使100个线程跑在100核CPU上，也只能用到1个核。
+
+Python虽然不能利用多线程实现多核任务，但可以通过多进程实现多核任务。多个Python进程有各自独立的GIL锁，互不影响。
