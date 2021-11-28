@@ -5,6 +5,7 @@
 缺失值或不可观察数据表示为NA,python 内建的none值也被当做NA值处理
 
 ### 过滤缺失值
+
 用dropna()过滤  当处理DataFrame对象时，dropna默认会删除包含趋势值的行
 
 参数how='all', 删除所有值均为NA的行；
@@ -16,6 +17,8 @@ axis=1删除列。
 df.dropna(thresh=2)
 #存在两个及以上的观察值的行会被保留
 ```
+NA处理方法：dropna,fillna,isnull,notnull
+
 ### 补全缺失值
 用fillna来补全缺失值，可用常数来代替缺失值
 ``` python
@@ -25,7 +28,8 @@ df.fillan({0:0.5, 2:0})
 #将第0列的缺失值替换为0.5，第2列的缺失值替换为0
 #更多参数见百度，包含value,method,axis,inplace,limit
 ```
-
+## 数据转换
+### 删除重复值
 
 
 
